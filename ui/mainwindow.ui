@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <property name="spacing">
+     <number>5</number>
+    </property>
+    <property name="leftMargin">
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>10</number>
+    </property>
+    <property name="bottomMargin">
+     <number>10</number>
+    </property>
+    <item>
+     <layout class="QVBoxLayout" name="verticalGrammarList">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLabel" name="grammarListLabel">
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Grammar List</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListWidget" name="grammarList">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayoutMain" stretch="0">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QVBoxLayout" name="verticalGlc1">
+        <item>
+         <widget class="QLabel" name="grammarLabel">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Context Free Grammar</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalGlc1">
+          <item>
+           <widget class="QPushButton" name="importGrammarButton">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Import Grammar</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="exportGrammarButton">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Export Grammar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalGlc2">
+          <item>
+           <widget class="QListWidget" name="productionList"/>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalGlc2">
+            <item>
+             <widget class="QPushButton" name="addProdButton">
+              <property name="text">
+               <string>Add Production</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="removeProdButton">
+              <property name="text">
+               <string>Remove Production</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="checkEmptyButton">
+              <property name="text">
+               <string>Empty / Finite / Infinite</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="firstButton">
+              <property name="text">
+               <string>First</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="followButton">
+              <property name="text">
+               <string>Follow</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="firstNTButton">
+              <property name="text">
+               <string>First-NT</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="factorableButton">
+              <property name="text">
+               <string>Factorable</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuGrammar_Operations">
+    <property name="title">
+     <string>Grammar Operations</string>
+    </property>
+    <addaction name="actionRemove_Unproductive"/>
+    <addaction name="actionRemove_Unreachable"/>
+    <addaction name="actionTransform_into_Epsilon_free"/>
+    <addaction name="actionRemove_Simple_Productions"/>
+    <addaction name="actionTransform_into_Proper_Grammar"/>
+    <addaction name="actionRemove_Left_Recursion"/>
+   </widget>
+   <addaction name="menuGrammar_Operations"/>
+  </widget>
+  <action name="actionRemove_Unproductive">
+   <property name="text">
+    <string>Remove Unproductive</string>
+   </property>
+  </action>
+  <action name="actionRemove_Unreachable">
+   <property name="text">
+    <string>Remove Unreachable</string>
+   </property>
+  </action>
+  <action name="actionTransform_into_Epsilon_free">
+   <property name="text">
+    <string>Transform into Epsilon-free</string>
+   </property>
+  </action>
+  <action name="actionRemove_Simple_Productions">
+   <property name="text">
+    <string>Remove Simple Productions</string>
+   </property>
+  </action>
+  <action name="actionTransform_into_Proper_Grammar">
+   <property name="text">
+    <string>Transform into Proper Grammar</string>
+   </property>
+  </action>
+  <action name="actionRemove_Left_Recursion">
+   <property name="text">
+    <string>Remove Left Recursion</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
