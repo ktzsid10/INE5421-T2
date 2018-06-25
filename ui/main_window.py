@@ -91,6 +91,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def export_grammar(self):
         path, _ = QFileDialog.getSaveFileName(self)
         if path:
+            self.update_grammar()
             self._grammar.save(path)
 
     #PROGRAM LOGIC FUNCTIONS
@@ -144,13 +145,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.critical(self, 'Error', error.args[0])
 
     def t_epsilon(self):
-        pass
+        if not self.update_grammar():
+            return
+
+        self._grammar.t_epsilon()
+        self.update_production_text()
 
     def remove_simple_productions(self):
-        pass
+        if not self.update_grammar():
+            return
+
+        self._grammar.remove_simple_productions()
+        self.update_production_text()
 
     def t_proper(self):
-        pass
+        grammars = self._grammar.t_proper()
+        self._grammar_list.append(grammars[0])
+        self.grammarList.addItem('intermediate epsilon free')
+        self._grammar_list.append(grammars[1])
+        self.grammarList.addItem('intermediate removing simple productions')
+        self._grammar_list.append(copy.deepcopy(self._grammar))
+        self.grammarList.addItem('final proper grammar')
+        self.update_production_text()
 
     def remove_left_recursion(self):
         pass
