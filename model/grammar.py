@@ -3,12 +3,49 @@
 # INE5421 - Trabalho Prático II Junho 2018
 
 import json
+import re
 from collections import OrderedDict
+
+NON_TERMINAL='[A-Z][0-9]*'
+TERMINAL='([a-z]|[0-9]|\+|-|\*|_|%|#|@|\?|!|/|\(|\))*'
+SEQUENCE='(( +(' + NON_TERMINAL + '|' + TERMINAL + '))*| +& ?)'
+GRAMMAR_INPUT=NON_TERMINAL + ' +->' + SEQUENCE  + '(\|' + SEQUENCE + ')*'
 
 class Grammar():
 
-    def __init__(self):
+    def __init__(self, text=None):
         self.productions = OrderedDict()
+        if text is not None:
+            if self.validate_text(text):
+                self._text_to_dict(text)
+            else:
+                raise ValueError('Not a valid context free grammar! Each symbol must '+
+                                 'be separate with a space.')
+
+    def validate_text(self, text):
+        prods = text.splitlines()
+        for p in prods:
+            if re.fullmatch(GRAMMAR_INPUT, p) is None:
+                return False
+
+        return True
+    
+    def validate_grammar(self):
+        for k, v in self.productions.items():
+            text = k + ' -> '
+            for p in v:
+                text += p + ' | '
+            if re.fullmatch(GRAMMAR_INPUT, text[:-2]) is None:
+                return False
+
+        return True
+
+    def _text_to_dict(self, text):
+        prods = text.splitlines()
+        for p in prods:
+            key, set_values = p.split(' ->')
+            values = [s.strip() for s in set_values.split('|')]
+            self.add(key, set(values))
 
     def initial_symbol(self):
         for k in self.productions.keys():

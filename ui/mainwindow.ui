@@ -106,6 +106,13 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalGlc1">
           <item>
+           <widget class="QPushButton" name="listButton">
+            <property name="text">
+             <string>Put In The List</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="importGrammarButton">
             <property name="font">
              <font>
@@ -134,21 +141,49 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalGlc2">
           <item>
-           <widget class="QListWidget" name="productionList"/>
+           <widget class="QPlainTextEdit" name="prodTextEdit"/>
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalGlc2">
             <item>
-             <widget class="QPushButton" name="addProdButton">
+             <widget class="QPushButton" name="runproductiveButton">
               <property name="text">
-               <string>Add Production</string>
+               <string>Remove Unproductive</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="removeProdButton">
+             <widget class="QPushButton" name="runreachableButton">
               <property name="text">
-               <string>Remove Production</string>
+               <string>Remove Unreachable</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="rsimpleProdButton">
+              <property name="text">
+               <string>Remove Simple Productions</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="tepsilonButton">
+              <property name="text">
+               <string>Epsilon-free</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="tproperButton">
+              <property name="text">
+               <string>Proper Grammar</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="rleftrecursionButton">
+              <property name="text">
+               <string>Remove Left Recursion</string>
               </property>
              </widget>
             </item>
@@ -210,58 +245,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuGrammar_Operations">
-    <property name="title">
-     <string>Grammar Operations</string>
-    </property>
-    <addaction name="actionRemove_Unproductive"/>
-    <addaction name="actionRemove_Unreachable"/>
-    <addaction name="actionTransform_into_Epsilon_free"/>
-    <addaction name="actionRemove_Simple_Productions"/>
-    <addaction name="actionTransform_into_Proper_Grammar"/>
-    <addaction name="actionRemove_Left_Recursion"/>
-   </widget>
-   <addaction name="menuGrammar_Operations"/>
-  </widget>
-  <action name="actionRemove_Unproductive">
-   <property name="text">
-    <string>Remove Unproductive</string>
-   </property>
-  </action>
-  <action name="actionRemove_Unreachable">
-   <property name="text">
-    <string>Remove Unreachable</string>
-   </property>
-  </action>
-  <action name="actionTransform_into_Epsilon_free">
-   <property name="text">
-    <string>Transform into Epsilon-free</string>
-   </property>
-  </action>
-  <action name="actionRemove_Simple_Productions">
-   <property name="text">
-    <string>Remove Simple Productions</string>
-   </property>
-  </action>
-  <action name="actionTransform_into_Proper_Grammar">
-   <property name="text">
-    <string>Transform into Proper Grammar</string>
-   </property>
-  </action>
-  <action name="actionRemove_Left_Recursion">
-   <property name="text">
-    <string>Remove Left Recursion</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>
