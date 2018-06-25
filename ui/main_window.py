@@ -107,13 +107,41 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
     def check_empty(self):
-        pass
+        if not self.update_grammar():
+            return
+        
+        grammar = copy.deepcopy(self._grammar)
+        try:
+            grammar.remove_unproductive()
+        except ValueError as error:
+            QMessageBox.information(self, 'Empty', error.args[0])
+            return
+        
+        # NEED TO CHECK FINITE OR INFINITE
 
     def remove_unproductive(self):
-        pass
+        if not self.update_grammar():
+            return
+
+        try:
+            grammar = copy.deepcopy(self._grammar)
+            grammar.remove_unproductive()
+            self._grammar = grammar
+            self.update_production_text()
+        except ValueError as error:
+            QMessageBox.critical(self, 'Error', error.args[0])
 
     def remove_unreachable(self):
-        pass
+        if not self.update_grammar():
+            return
+        
+        try:
+            grammar = copy.deepcopy(self._grammar)
+            grammar.remove_unreachable()
+            self._grammar = grammar
+            self.update_production_text()
+        except ValueError as error:
+            QMessageBox.critical(self, 'Error', error.args[0])
 
     def t_epsilon(self):
         pass
