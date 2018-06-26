@@ -145,6 +145,8 @@ class Grammar():
             
             self.edit_key(k, k, prod_set)
 
+        return new_nf
+
     def _is_terminal(self, production):
         symbols = production.split(' ')
         for s in symbols:
@@ -183,6 +185,8 @@ class Grammar():
             if k not in new_v:
                 new_prods.pop(k)
         self.productions = new_prods
+
+        return new_v
 
     def t_epsilon(self):
         old_ne = set()
@@ -225,6 +229,8 @@ class Grammar():
                 new_prods[k] = v
 
             self.productions = new_prods
+        
+        return new_ne
 
     def _is_in_ne(self, old_ne, p):
         symbols = [s for s in p.split(' ') if s != '']
@@ -264,13 +270,42 @@ class Grammar():
         return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s)+1))
 
     def remove_simple_productions(self):
-        pass
+        self.t_epsilon()
+        first_na = dict()
+        for k, v in self.productions.items():
+            first_na[k] = {k}
+            for p in v:
+                if re.fullmatch(NON_TERMINAL, p.strip()) is not None:
+                    first_na[k].add(p.strip())
+        
+        na = copy.deepcopy(first_na)
+        for k, v in first_na.items():
+            for p in v:
+                if k != p.strip():
+                    [na[k].add(new_p) for new_p in first_na[p]]
+
+        print('NA dict: '+str(na))
+
+        for k, v in self.productions.items():
+            new_prod = set()
+            for p in v:
+                if re.fullmatch(NON_TERMINAL, p.strip()) is None:
+                    new_prod.add(p)
+            self.edit_key(k, k, new_prod)
+        
+        for k, v in na.items():
+            for p in v:
+                if k != p.strip():
+                    new_prod = self.productions[p.strip()]
+                    self.edit_key(k, k, self.productions[k]|new_prod)
+
+        return na
 
     def t_proper(self):
-        self.t_epsilon()
+        ne = self.t_epsilon()
         grammar_1 = copy.deepcopy(self)
-        self.remove_simple_productions()
+        na = self.remove_simple_productions()
         grammar_2 = copy.deepcopy(self)
-        self.remove_unproductive()
-        self.remove_unreachable()
-        return (grammar_1, grammar_2)
+        nf = self.remove_unproductive()
+        vi = self.remove_unreachable()
+        return (grammar_1, grammar_2, nf, vi, ne, na)

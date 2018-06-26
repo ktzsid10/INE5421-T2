@@ -107,6 +107,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def factorable(self):
         pass
 
+    def remove_left_recursion(self):
+        pass
+
     def check_empty(self):
         if not self.update_grammar():
             return
@@ -167,6 +170,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self._grammar_list.append(copy.deepcopy(self._grammar))
         self.grammarList.addItem('final proper grammar')
         self.update_production_text()
-
-    def remove_left_recursion(self):
-        pass
+        text = ('NF: '+str(grammars[2])+'\nVI: '+str(grammars[3])+
+                '\nNE: '+str(grammars[4])+'\nNA: '+str(grammars[5]))
+        QMessageBox.information(self, 'Sets', text)
