@@ -96,13 +96,41 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     #PROGRAM LOGIC FUNCTIONS
     def first(self):
-        pass
+        if not self.update_grammar():
+            return
+
+        first = self._grammar.first()
+        nt = set()
+        text = ''
+        for k,v in first.items():
+            if k not in nt:
+                text += '\nFirst({}): '.format(k)
+                text += '{}'.format(v)
+                nt.add(k)
+            else:
+                text += ', {}'.format(v)
+            
+        QMessageBox.information(self, 'First', text)
 
     def firstNT(self):
         pass
 
     def follow(self):
-        pass
+        if not self.update_grammar():
+            return
+
+        follow = self._grammar.follow()
+        nt = set()
+        text = ''
+        for k,v in follow.items():
+            if k not in nt:
+                text += '\nFollow({}): '.format(k)
+                text += '{}'.format(v)
+                nt.add(k)
+            else:
+                text += ', {}'.format(v)
+            
+        QMessageBox.information(self, 'Follow', text)
 
     def factorable(self):
         pass

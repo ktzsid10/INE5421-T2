@@ -1,4 +1,4 @@
-# Joao Victor Fagunes
+# Joao Victor Fagundes
 # Salomao Rodrigues Jacinto
 # INE5421 - Trablho Prático II Junho 2018
 

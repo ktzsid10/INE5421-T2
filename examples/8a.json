@@ -1,0 +1,26 @@
+{
+    "object": "grammar",
+    "productions": {
+        "P": [
+            "B",
+            "P ; B"
+        ],
+        "B": [
+            "K V C"
+        ],
+        "K": [
+            "&",
+            "c K"
+        ],
+        "V": [
+            "&",
+            "v V"
+        ],
+        "C": [
+            "&",
+            "C com",
+            "b C e",
+            "b K V ; C e"
+        ]
+    }
+}

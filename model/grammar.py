@@ -9,7 +9,7 @@ import itertools
 from collections import OrderedDict
 
 NON_TERMINAL='[A-Z][0-9]*'
-TERMINAL='([a-z]|[0-9]|\+|-|\*|_|%|#|@|\?|!|/|\(|\))*'
+TERMINAL='([a-z]|[0-9]|\+|-|\*|_|%|#|@|\?|!|;|/|\(|\))*'
 SEQUENCE='(( +(' + NON_TERMINAL + '|' + TERMINAL + '))*| +& ?)'
 GRAMMAR_INPUT=NON_TERMINAL + ' +->' + SEQUENCE  + '(\|' + SEQUENCE + ')*'
 
@@ -87,13 +87,91 @@ class Grammar():
             raise ValueError('Not a valid file!')
 
     def first(self):
-        pass
+        first = dict()
+    
+        #Step 2 of class algorithm
+        for k,v in self.productions.items():
+            first_set = set()
+            for prod in v:
+                symbols = prod.strip().split(' ')
+                if self._is_terminal(symbols[0]) or symbols[0] == '&':
+                    first_set.add(symbols[0])
+            
+                first[k] = first_set
+
+        first_copy = copy.deepcopy(first)
+        #Step 3 of class algorithm      
+        while(True):
+            for k,v in self.productions.items():
+                first_set = set()
+                for prod in v:
+                    symbols = prod.strip().split(' ')
+                    for i in range(len(symbols)):
+                        first_nt = set()
+                        if not self._is_terminal(symbols[i]) and symbols[i] != '&':
+                            first_nt = first_nt | first[symbols[i]]
+                            if '&' not in first_nt or i == (len(symbols) - 1):
+                                first_set = first_set | first_nt
+                                break
+                        else:
+                            first_set = first_set | first_nt
+                            first_set.add(symbols[i])
+                            break
+
+                        first_set = first_set | first_nt
+
+                if first_set != set():
+                    first[k] = first_set
+
+            if first_copy == first:
+                break
+            else:
+                first_copy = copy.deepcopy(first)
+
+        return first
 
     def firstNT(self):
         pass
 
     def follow(self):
-        pass
+        first = self.first()
+        follow = first.fromkeys(first, set())
+        follow_copy = copy.deepcopy(follow)
+        #Step 1
+        follow[self.initial_symbol()] = {'$'}
+
+        while(True):
+            for k,v in self.productions.items():
+                for prod in v:
+                    symbols = prod.strip().split(' ')
+                    for i in range(len(symbols)):
+                        #Step 2: B is non-terminal and has a Beta different of & after him
+                        if not self._is_terminal(symbols[i]) and symbols[i] != '&' and (i < len(symbols) - 1):
+                            #Step 2.a: Beta is a terminal
+                            if self._is_terminal(symbols[i+1]):
+                                follow[symbols[i]].add(symbols[i+1])
+                            elif symbols[i+1] != '&':
+                                #Step 2.b: Beta is non-terminal
+                                follow[symbols[i]] = follow[symbols[i]] | first[symbols[i+1]]
+                                #Step 3.b: & belongs to First(Beta)
+                                if '&' in first[symbols[i+1]]:
+                                    follow[symbols[i]] = follow[symbols[i]] | follow[k]
+                        #Step 3.a: B is production's last symbol and non-terminal
+                        elif not self._is_terminal(symbols[i]) and symbols[i] != '&':
+                            follow[symbols[i]] = follow[symbols[i]] | follow[k]
+            
+            if follow_copy == follow:
+                break
+            else:
+                follow_copy = copy.deepcopy(follow)
+        
+        return self.remove_epsilon_from_follow(follow)
+
+    def remove_epsilon_from_follow(self, follow):
+        for f in follow.values():
+            f.discard('&')
+        
+        return follow
 
     def factorable(self):
         pass
