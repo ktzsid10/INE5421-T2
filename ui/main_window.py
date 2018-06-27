@@ -99,10 +99,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.update_grammar():
             return
 
-        first = self._grammar.first()
+        self._grammar.first()
         nt = set()
         text = ''
-        for k,v in first.items():
+        for k,v in self._grammar._first.items():
             if k not in nt:
                 text += '\nFirst({}): '.format(k)
                 text += '{}'.format(v)

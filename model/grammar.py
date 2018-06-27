@@ -17,6 +17,8 @@ class Grammar():
 
     def __init__(self, text=None):
         self.productions = OrderedDict()
+        self._first = dict()
+        self._follow = dict()
         if text is not None:
             if self.validate_text(text):
                 self._text_to_dict(text)
@@ -87,7 +89,7 @@ class Grammar():
             raise ValueError('Not a valid file!')
 
     def first(self):
-        first = dict()
+        self._first = dict()
     
         #Step 2 of class algorithm
         for k,v in self.productions.items():
@@ -97,9 +99,9 @@ class Grammar():
                 if self._is_terminal(symbols[0]) or symbols[0] == '&':
                     first_set.add(symbols[0])
             
-                first[k] = first_set
+                self._first[k] = first_set
 
-        first_copy = copy.deepcopy(first)
+        first_copy = copy.deepcopy(self._first)
         #Step 3 of class algorithm      
         while(True):
             for k,v in self.productions.items():
@@ -109,7 +111,7 @@ class Grammar():
                     for i in range(len(symbols)):
                         first_nt = set()
                         if not self._is_terminal(symbols[i]) and symbols[i] != '&':
-                            first_nt = first_nt | first[symbols[i]]
+                            first_nt = first_nt | self._first[symbols[i]]
                             if '&' not in first_nt or i == (len(symbols) - 1):
                                 first_set = first_set | first_nt
                                 break
@@ -121,21 +123,20 @@ class Grammar():
                         first_set = first_set | first_nt
 
                 if first_set != set():
-                    first[k] = first_set
+                    self._first[k] = first_set
 
-            if first_copy == first:
+            if first_copy == self._first:
                 break
             else:
-                first_copy = copy.deepcopy(first)
+                first_copy = copy.deepcopy(self._first)
 
-        return first
 
     def firstNT(self):
         pass
 
     def follow(self):
-        first = self.first()
-        follow = first.fromkeys(first, set())
+        self.first()
+        follow = self._first.fromkeys(self._first, set())
         follow_copy = copy.deepcopy(follow)
         #Step 1
         follow[self.initial_symbol()] = {'$'}
@@ -152,9 +153,10 @@ class Grammar():
                                 follow[symbols[i]].add(symbols[i+1])
                             elif symbols[i+1] != '&':
                                 #Step 2.b: Beta is non-terminal
-                                follow[symbols[i]] = follow[symbols[i]] | first[symbols[i+1]]
+                                follow[symbols[i]] = follow[symbols[i]] | self.first_sequence(symbols[i+1:])
                                 #Step 3.b: & belongs to First(Beta)
-                                if '&' in first[symbols[i+1]]:
+
+                                if '&' in self.first_sequence(symbols[i+1:]):
                                     follow[symbols[i]] = follow[symbols[i]] | follow[k]
                         #Step 3.a: B is production's last symbol and non-terminal
                         elif not self._is_terminal(symbols[i]) and symbols[i] != '&':
@@ -172,6 +174,20 @@ class Grammar():
             f.discard('&')
         
         return follow
+
+    def first_sequence(self, sequence):
+        first = set()
+        for i in range(len(sequence)):
+            first.discard('&')
+            if self._is_terminal(sequence[i]):
+                first.add(sequence[i])
+                break
+            else:
+                first = first | self._first[sequence[i]]
+                if '&' not in first:
+                    break
+
+        return first
 
     def factorable(self):
         pass
