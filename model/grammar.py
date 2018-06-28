@@ -19,6 +19,7 @@ class Grammar():
         self.productions = OrderedDict()
         self._first = dict()
         self._follow = dict()
+        self._first_nt = dict()
         if text is not None:
             if self.validate_text(text):
                 self._text_to_dict(text)
@@ -88,9 +89,7 @@ class Grammar():
         else:
             raise ValueError('Not a valid file!')
 
-    def first(self):
-        self._first = dict()
-    
+    def first(self):    
         #Step 2 of class algorithm
         for k,v in self.productions.items():
             first_set = set()
@@ -132,7 +131,17 @@ class Grammar():
 
 
     def firstNT(self):
-        pass
+        self.first()
+        for k,v in self.productions.items():
+            first = set()
+            for prod in v:
+                sequence = prod.strip().split(' ')
+                first = first | self.firstNT_sequence(sequence)
+                for symbol in first:
+                    if self._is_terminal(symbol) or symbol == '&':
+                        first.discard(symbol)
+            self._first_nt[k] = first
+
 
     def follow(self):
         self.first()
@@ -186,8 +195,22 @@ class Grammar():
                 first = first | self._first[sequence[i]]
                 if '&' not in first:
                     break
-
         return first
+
+    def firstNT_sequence(self, sequence):
+        first = set()
+        for i in range(len(sequence)):
+            if not self._is_terminal(sequence[i]) and sequence[i] != '&':
+                first.add(sequence[i])
+                if '&' not in self._first[sequence[i]] or i == (len(sequence) - 1):
+                    break
+                else:
+                    first = first | self.firstNT_sequence(sequence[i+1:])
+            else:
+                break
+        
+        return first
+
 
     def factorable(self):
         pass
@@ -197,7 +220,35 @@ class Grammar():
 
     def check_empty(self):
         self.remove_unproductive()
-        # NEED TO CHECK INFITE OR FINITE
+
+    def is_finite(self):
+        for k,v in self.productions.items():
+            nts_called = self.calls_itself(k, v, ['&'])
+            if nts_called != list():
+                for nt in nts_called:
+                    if nt == '&':
+                        continue
+                    else:
+                        nts_called = self.calls_itself(k, nt, nts_called)
+                        if nts_called == list():
+                            return True
+            else:
+                return False
+        
+        return True
+
+
+    def calls_itself(self, nt, prods, nts_called):
+        for prod in prods:
+            symbols = prod.strip().split(' ')
+            for s in symbols:
+                if not self._is_terminal(s):
+                    if s == nt:
+                        return list()
+                    elif s not in nts_called:
+                        nts_called.append(s)
+
+        return nts_called
 
     def remove_unproductive(self):
         old_nf = set()

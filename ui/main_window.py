@@ -113,7 +113,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMessageBox.information(self, 'First', text)
 
     def firstNT(self):
-        pass
+        if not self.update_grammar():
+            return
+
+        self._grammar.firstNT()
+        nt = set()
+        text = ''
+        for k,v in self._grammar._first_nt.items():
+            if k not in nt:
+                text += '\nFirst-NT({}): '.format(k)
+                if v != set():
+                    text += '{}'.format(v)
+                else:
+                    text += 'Empty'
+                nt.add(k)
+            else:
+                text += ', {}'.format(v)
+            
+        QMessageBox.information(self, 'First-NT', text)
 
     def follow(self):
         if not self.update_grammar():
@@ -142,9 +159,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.update_grammar():
             return
         
+        text = ''
         grammar = copy.deepcopy(self._grammar)
         try:
             grammar.remove_unproductive()
+            text += 'Not Empty\n' 
+            if grammar.is_finite():
+                text += 'Is finite'
+            else:
+                text += 'Is infinite'
+
+            QMessageBox.information(self, 'Not Empty', text)
         except ValueError as error:
             QMessageBox.information(self, 'Empty', error.args[0])
             return
